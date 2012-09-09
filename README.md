@@ -1,4 +1,4 @@
-# mongoid-ordering
+# mongoid-ordering  [![Build Status](https://secure.travis-ci.org/DouweM/mongoid-ordering.png?branch=master)](http://travis-ci.org/DouweM/mongoid-ordering)
 
 mongoid-ordering makes it easy to keep your Mongoid documents in order.
 
@@ -67,7 +67,7 @@ end
 
 You will now have access to the following methods:
 
-```
+```ruby
 # Retrieve siblings positioned above this document.
 book.higher_siblings
 # Retrieve siblings positioned below this document.
