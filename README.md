@@ -74,7 +74,7 @@ book.higher_siblings
 book.lower_siblings
 # Retrieve the highest sibling.
 book.highest_sibling
-# Retrive the lowest sibling.
+# Retrieve the lowest sibling.
 book.lowest_sibling
 
 # Is this the highest sibling?
