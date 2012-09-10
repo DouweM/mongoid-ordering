@@ -25,7 +25,7 @@ extracted it into the gem you're looking at right now.
 Add the following to your Gemfile:
 
 ```ruby
-gem "mongoid-ordering"
+gem "mongoid-ordering", require: "mongoid/ordering"
 ```
 
 And tell Bundler to install the new gem:
