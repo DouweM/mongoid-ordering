@@ -1,3 +1,5 @@
+require "mongoid/siblings"
+
 module Mongoid
 
   # Add 'position' field, multiple methods and multiple callbacks to help with 
