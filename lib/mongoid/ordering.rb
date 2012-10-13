@@ -14,6 +14,8 @@ module Mongoid
       
       field :position, type: Integer
 
+      index position: 1
+
       default_scope asc(:position)
 
       before_save :assign_default_position
