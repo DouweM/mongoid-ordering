@@ -206,13 +206,17 @@ module Mongoid
 
       def move_lower_siblings_up
         return if self.ordering_scopes.any? do |scope|
-          scope_metadata = self.reflect_on_association(scope)
-          next if scope_metadata.nil?
-
-          relation = send(scope_metadata.name)
+          relation = send(scope)
           next if relation.nil?
 
-          relation.flagged_for_destroy? && scope_metadata.inverse_metadata(relation).destructive?
+          next unless relation.flagged_for_destroy?
+
+          inverse_metadata = intelligent_inverse_metadata(scope, relation)
+          next if inverse_metadata.nil?
+
+          inverse_metadata.destructive?
+
+          # We're testing relation.flagged_for_destroy? && inverse_metadata.destructive?
         end
 
         self.lower_siblings.each { |s| s.inc(:position, -1) }
