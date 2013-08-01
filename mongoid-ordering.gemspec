@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = "mongoid-ordering"
-  s.version       = "0.1.4"
+  s.version       = "0.1.5"
   s.platform      = Gem::Platform::RUBY
   s.author        = "Douwe Maan"
   s.email         = "douwe@selenight.nl"
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.require_path  = "lib"
 
   s.add_runtime_dependency "mongoid", "~> 3.0"
-  s.add_runtime_dependency "mongoid-siblings", "~> 0.1.0"
+  s.add_runtime_dependency "mongoid-siblings", "~> 0.1.2"
   
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
