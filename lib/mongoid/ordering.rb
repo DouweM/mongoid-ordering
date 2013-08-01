@@ -205,6 +205,16 @@ module Mongoid
     private  
 
       def move_lower_siblings_up
+        return if self.ordering_scopes.any? do |scope|
+          scope_metadata = self.reflect_on_association(scope)
+          next if scope_metadata.nil?
+
+          relation = send(scope_metadata.name)
+          next if relation.nil?
+
+          relation.flagged_for_destroy? && scope_metadata.inverse_metadata(relation).destructive?
+        end
+
         self.lower_siblings.each { |s| s.inc(:position, -1) }
       end
 

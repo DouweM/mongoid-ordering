@@ -5,7 +5,8 @@ class DummyParentDocument
   ordered scope: nil
   
   has_many :children, class_name: "DummyChildDocument",
-                      inverse_of: :parent
+                      inverse_of: :parent,
+                      dependent:  :destroy
 end
 
 class DummyChildDocument
@@ -14,6 +15,6 @@ class DummyChildDocument
   
   ordered scope: :parent
   
-  belongs_to :parent, class_name: DummyParentDocument.to_s,
+  belongs_to :parent, class_name: "DummyParentDocument",
                       inverse_of: :children
 end

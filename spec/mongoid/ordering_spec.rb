@@ -277,15 +277,27 @@ describe Mongoid::Ordering do
   
   describe "destroying a document" do
   
-    let!(:sibling1) { DummyParentDocument.create }  
-    let!(:sibling2) { DummyParentDocument.create }  
-    let!(:sibling3) { DummyParentDocument.create }
+    let!(:parent1)        { DummyParentDocument.create }  
+    let!(:parent2)        { DummyParentDocument.create }
+    let!(:parent3)        { DummyParentDocument.create }
+    let!(:parent3_child1) { DummyChildDocument.create(parent: parent3) }
+    let!(:parent3_child2) { DummyChildDocument.create(parent: parent3) }
+    let!(:parent3_child3) { DummyChildDocument.create(parent: parent3) }
     
     it "moves lower siblings up" do
-      sibling2.destroy
+      parent2.destroy
       
-      sibling1.reload.position.should eq(0)
-      sibling3.reload.position.should eq(1)
+      parent1.reload.position.should eq(0)
+      parent3.reload.position.should eq(1)
+    end
+
+    context "when deletion is cascaded to the document's children" do
+
+      it "doesn't move lower siblings of those children up" do
+        DummyChildDocument.any_instance.should_not_receive(:inc)
+
+        parent3.destroy
+      end
     end
   end
 end
