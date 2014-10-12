@@ -16,7 +16,7 @@ module Mongoid
 
       index position: 1
 
-      default_scope asc(:position)
+      default_scope lambda { asc(:position) }
 
       before_save :assign_default_position
       before_save :reposition_former_siblings, if: :sibling_reposition_required?
@@ -138,8 +138,8 @@ module Mongoid
     #   book.move_up
     def move_up
       return if at_top?
-      self.siblings.where(position: self.position - 1).first.inc(:position, 1)
-      self.inc(:position, -1)
+      self.siblings.where(position: self.position - 1).first.inc(position: 1)
+      self.inc(position: -1)
     end
 
     # Moves this document one position down.
@@ -148,8 +148,8 @@ module Mongoid
     #   book.move_down
     def move_down
       return if at_bottom?
-      self.siblings.where(position: self.position + 1).first.inc(:position, -1)
-      self.inc(:position, 1)
+      self.siblings.where(position: self.position + 1).first.inc(position: -1)
+      self.inc(position: 1)
     end
 
     # Moves this document above the specified document.
@@ -166,11 +166,11 @@ module Mongoid
 
       if self.position > other.position
         new_position = other.position
-        other.lower_siblings.and(:position.lt => self.position).each { |s| s.inc(:position, 1) }
-        other.inc(:position, 1)
+        other.lower_siblings.and(:position.lt => self.position).each { |s| s.inc(position: 1) }
+        other.inc(position: 1)
       else
         new_position = other.position - 1
-        other.higher_siblings.and(:position.gt => self.position).each { |s| s.inc(:position, -1) }
+        other.higher_siblings.and(:position.gt => self.position).each { |s| s.inc(position: -1) }
       end
       self.position = new_position
 
@@ -191,11 +191,11 @@ module Mongoid
 
       if self.position > other.position
         new_position = other.position + 1
-        other.lower_siblings.and(:position.lt => self.position).each { |s| s.inc(:position, 1) }
+        other.lower_siblings.and(:position.lt => self.position).each { |s| s.inc(position: 1) }
       else
         new_position = other.position
-        other.higher_siblings.and(:position.gt => self.position).each { |s| s.inc(:position, -1) }
-        other.inc(:position, -1)
+        other.higher_siblings.and(:position.gt => self.position).each { |s| s.inc(position: -1) }
+        other.inc(position: -1)
       end
       self.position = new_position
 
@@ -219,7 +219,7 @@ module Mongoid
           # We're testing relation.flagged_for_destroy? && inverse_metadata.destructive?
         end
 
-        self.lower_siblings.each { |s| s.inc(:position, -1) }
+        self.lower_siblings.each { |s| s.inc(position: -1) }
       end
 
       def sibling_reposition_required?
@@ -248,7 +248,7 @@ module Mongoid
         end
         
         former_siblings = self.siblings(scope_values: old_scope_values).where(:position.gt => (attribute_was("position") || 0))
-        former_siblings.each { |s| s.inc(:position,  -1) }
+        former_siblings.each { |s| s.inc(position: -1) }
       end
 
       def assign_default_position
@@ -257,7 +257,7 @@ module Mongoid
                        !new_record?)
 
         siblings = self.siblings
-        self.position = if siblings.empty? || siblings.map(&:position).compact.empty?
+        self.position = if siblings.empty? || siblings.map(:position).compact.empty?
           0
         else
           siblings.max(:position).to_i + 1

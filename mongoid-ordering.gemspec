@@ -13,9 +13,10 @@ Gem::Specification.new do |s|
   s.test_files    = Dir.glob("spec/**/*")
   s.require_path  = "lib"
 
-  s.add_runtime_dependency "mongoid", "~> 3.0"
+  s.add_runtime_dependency "mongoid", "~> 4.0"
   s.add_runtime_dependency "mongoid-siblings", "~> 0.1.2"
   
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
+  s.add_development_dependency "byebug"
 end

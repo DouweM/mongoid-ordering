@@ -262,7 +262,7 @@ describe Mongoid::Ordering do
     
     before(:each) do
       parent1_child2.parent = parent2
-      parent1_child2.save
+      parent1_child2.save!
     end
     
     it "moves lower siblings up" do

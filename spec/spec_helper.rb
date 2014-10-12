@@ -5,6 +5,8 @@ require "mongoid"
 require "mongoid/siblings"
 require "mongoid/ordering"
 
+require "byebug"
+
 require "rspec"
 
 Mongoid.configure do |config|
